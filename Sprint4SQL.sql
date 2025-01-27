@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS sprint4;
+USE sprint4;
+
 -- Comprovar i arreglar permisos
 SET GLOBAL local_infile = TRUE;
 SHOW GLOBAL VARIABLES LIKE 'local_infile';
@@ -150,8 +153,8 @@ WITH RECURSIVE SplitValues AS (
         WHERE remaining_values IS NOT NULL)
 SELECT id, split_value
 FROM SplitValues;
-ALTER TABLE transaction
-DROP product_ids;
+ /*ALTER TABLE transaction
+DROP product_ids; */
 
 -- NIVELL 1
 -- Afegim les FK a les taules
@@ -208,7 +211,7 @@ CREATE TABLE active_cards (
 );
 
 INSERT INTO active_cards (card_id, active)
-SELECT card_id, IF(sum(declined) > 0, 0, 1) as Active
+SELECT card_id, IF(sum(declined)>= 3, 0, 1) as Active
 FROM (SELECT card_id, timestamp, declined
 	FROM (SELECT *, row_number() over (partition by card_id order by card_id, timestamp desc) as seqnum
 	from transaction) as a

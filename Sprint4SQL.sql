@@ -153,8 +153,9 @@ WITH RECURSIVE SplitValues AS (
         WHERE remaining_values IS NOT NULL)
 SELECT id, split_value
 FROM SplitValues;
- /*ALTER TABLE transaction
+/*ALTER TABLE transaction
 DROP product_ids; */
+
 
 -- NIVELL 1
 -- Afegim les FK a les taules
@@ -175,13 +176,16 @@ FOREIGN KEY (product_id) REFERENCES products(id);
 
 -- Exercici 1
 -- Realitza una subconsulta que mostri tots els usuaris amb més de 30 transaccions utilitzant almenys 2 taules.
-SELECT data_users.id as User, count(transaction.id) as NumTrans
+/*SELECT data_users.id as User, count(transaction.id) as NumTrans
 FROM data_users
 JOIN transaction
 ON (data_users.id = user_id)
 GROUP BY data_users.id
 HAVING count(transaction.id) > 30
-ORDER BY NumTrans desc;
+ORDER BY NumTrans desc;*/
+SELECT name
+FROM data_users
+WHERE id IN (SELECT user_id FROM transaction GROUP BY user_id HAVING count(id) > 30);
 
 -- Exercici 2
 -- Mostra la mitjana d'amount per IBAN de les targetes de crèdit a la companyia Donec Ltd, utilitza almenys 2 taules.
